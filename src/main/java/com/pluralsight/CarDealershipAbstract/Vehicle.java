@@ -1,4 +1,4 @@
-package CarDealershipAbstract;
+package com.pluralsight.CarDealershipAbstract;
 
 public class Vehicle {
     String brand;

@@ -1,4 +1,4 @@
-package CarDealershipAbstract;
+package com.pluralsight.CarDealershipAbstract;
 
 public abstract class Contract {
     String date;

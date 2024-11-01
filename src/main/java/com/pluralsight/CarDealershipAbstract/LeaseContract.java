@@ -1,12 +1,14 @@
-package CarDealershipAbstract;
+package com.pluralsight.CarDealershipAbstract;
 
 public class LeaseContract extends Contract {
     double endingValue;
-    double leaseFee;
     double getTotalPrice;
     double getMonthlyPayment;
+    double leaseFee;
+    double leaseAPR = .04;
+    double leaseTerm = 36;
 
-    public LeaseContract(String date, String customerName, String customerEmail, String vehicleSold, double getTotalPrice, double getMonthlyPayment) {
+    public LeaseContract(String date, String customerName, String customerEmail, String vehicleSold) {
         super(date, customerName, customerEmail, vehicleSold);
         this.getTotalPrice = getTotalPrice;
         this.getMonthlyPayment = getMonthlyPayment;
@@ -21,7 +23,7 @@ public class LeaseContract extends Contract {
     }
 
     public double getLeaseFee() {
-        return leaseFee;
+        return this.vehiclePrice * leaseAPR * leaseTerm;
     }
 
     public void setLeaseFee(double leaseFee) {
@@ -30,11 +32,11 @@ public class LeaseContract extends Contract {
 
     @Override
     public double getTotalPrice() {
-        return 0;
+        return getMonthlyPayment() * leaseTerm;
     }
 
     @Override
     public double getMonthlyPayment(){
-    return 0;
+        return vehiclePrice * leaseAPR / (1 - Math.pow(1 + leaseAPR, -leaseTerm));
     }
 }

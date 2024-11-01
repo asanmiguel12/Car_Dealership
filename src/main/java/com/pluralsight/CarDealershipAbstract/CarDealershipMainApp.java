@@ -1,4 +1,4 @@
-package CarDealershipAbstract;
+package com.pluralsight.CarDealershipAbstract;
 
 import java.io.IOException;
 

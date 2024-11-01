@@ -1,4 +1,4 @@
-package CarDealershipAbstract;
+package com.pluralsight.CarDealershipAbstract;
 
 import java.util.Scanner;
 
@@ -86,16 +86,20 @@ public class SalesContract extends Contract{
 //        (p * (((r * Math.pow(1 + r, n))) / ((Math.pow((1 + r), n)) - 1)));
 //        Monthly payment = (loan amount) *
 //        (interest rate / 12) / (1 − (1 + (interest rate / 12)) ^ (-loan term))
-        double rate = .0425;
+        double rate1 = .0425;
+        double rate2 = .05;
         double principal = this.vehiclePrice;
         double term1 = 48;
         double term2 = 24;
 
         if (principal > 10000) {
-            double monthlyPayment = principal * (rate / 12) / Math.pow((1 - (1 + (rate / 12))), -term1);
+            double monthlyPayment = principal * (rate1 / 12) / Math.pow((1 - (1 + (rate1 / 12))), -term1);
+            System.out.println("Monthly payment: " + monthlyPayment);
         } else {
-            double monthlyPayment = principal * (rate/12) / Math.pow((1 - (1 + (rate/12))), -term2);
+            double monthlyPayment = principal * (rate2 / 12) / Math.pow((1 - (1 + (rate2 / 12))), -term2);
+            System.out.println("Monthly payment: " + monthlyPayment);
         }
+
         return monthlyPayment;
     }
 
