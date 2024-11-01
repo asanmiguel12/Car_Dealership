@@ -1,7 +1,5 @@
 package CarDealershipAbstract;
 
-import com.pluralsight.DealershipFileManager;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
