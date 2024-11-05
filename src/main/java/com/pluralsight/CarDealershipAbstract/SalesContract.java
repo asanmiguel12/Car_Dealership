@@ -6,15 +6,10 @@ public class SalesContract extends Contract{
     double salesTax;
     double recordingFee;
     double processingFee;
-    double vehiclePrice;
-    double getTotalPrice;
-    double getMonthlyPayment;
 
-    public SalesContract(String date, String customerName, String customerEmail, String vehicleSold, double vehiclePrice, double getTotalPrice, double getMonthlyPayment) {
+    public SalesContract(String date, String customerName, String customerEmail, Vehicle vehicleSold, double getTotalPrice, double getMonthlyPayment) {
         super(date, customerName, customerEmail, vehicleSold);
-        this.getTotalPrice = totalPrice;
-        this.getMonthlyPayment = getMonthlyPayment;
-        this.vehiclePrice = vehiclePrice;
+
     }
 
 
@@ -65,30 +60,24 @@ public class SalesContract extends Contract{
 
     @Override
     public double getTotalPrice() {
-        if (willFinance() == true) {
-            double rate = .0425;
-            double vehiclePrice = this.vehiclePrice;
-            double term1 = 48;
-            double term2 = 24;
-            double totalInterest = vehiclePrice * rate * term1;
-            return getMonthlyPayment();
-        } else {
+        if (!willFinance()) {
             return 0;
+        } else {
+            return getMonthlyPayment() + processingFee + recordingFee + salesTax;
         }
     }
-    public double setTotalPrice() {
 
-        return getTotalPrice;
+    public double setTotalPrice() {
+        return getTotalPrice();
     }
 
     @Override
     public double getMonthlyPayment() {
 //        (p * (((r * Math.pow(1 + r, n))) / ((Math.pow((1 + r), n)) - 1)));
-//        Monthly payment = (loan amount) *
-//        (interest rate / 12) / (1 − (1 + (interest rate / 12)) ^ (-loan term))
+//        Monthly payment = (loan amount) * (interest rate / 12) / (1 − (1 + (interest rate / 12)) ^ (-loan term))
         double rate1 = .0425;
         double rate2 = .05;
-        double principal = this.vehiclePrice;
+        double principal = getTotalPrice();
         double term1 = 48;
         double term2 = 24;
 
@@ -104,6 +93,6 @@ public class SalesContract extends Contract{
     }
 
     public double setMonthlyPayment() {
-        return getMonthlyPayment;
+        return getMonthlyPayment();
     }
 }

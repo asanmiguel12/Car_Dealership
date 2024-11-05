@@ -87,14 +87,12 @@ public class Dealership {
         return vehiclesByYear;
     }
 
-
     public List<Vehicle> getVehicleByColor(String color) throws IOException {
         ArrayList<Vehicle> inventory = new ArrayList<Vehicle>();
         DealershipFileManager dealershipFileManager = new DealershipFileManager();
 
         dealershipFileManager.getInventory();
         return inventory;
-
     }
 
     public List<Vehicle> getVehicleByMileage(int min, int max) {

@@ -25,9 +25,11 @@ Scanner scanner = new Scanner(System.in);
                     "4) Vehicles By Mileage" + "\n" +
                     "5) Vehicles By Year" + "\n" +
                     "6) Vehicles By Type" + "\n" +
-                    "6) All Vehicles" + "\n" +
-                    "7) Add Vehicle To Inventory" + "\n" +
-                    "8) Remove Vehicle From Inventory ");
+                    "7) All Vehicles" + "\n" +
+                    "8) Add Vehicle To Inventory" + "\n" +
+                    "9) Remove Vehicle From Inventory " + "\n" +
+                    "10) Purchase Vehicle" + "\n" +
+                    "X) Exit");
 
             int userInput = scanner.nextInt();
             switch (userInput) {
@@ -53,11 +55,11 @@ Scanner scanner = new Scanner(System.in);
                     break;
                 case 6:
                     dealershipFileManager.getDealership();
-                    processGetAllVehiclesRequest();
+                    processGetByVehicleTypeRequest();
                     break;
                 case 7:
                     dealershipFileManager.getDealership();
-                    dealership.getAllVehicles();
+                    processGetAllVehiclesRequest();
                     break;
                 case 8:
                     dealershipFileManager.getDealership();
@@ -66,6 +68,12 @@ Scanner scanner = new Scanner(System.in);
                 case 9:
                     dealershipFileManager.getDealership();
                     processRemoveVehicleRequest();
+                case 10:
+                    dealershipFileManager.getDealership();
+                    purchaseVehicle();
+                    break;
+                case 'X':
+                    dealershipFileManager.getDealership();
                     break;
 
             }
@@ -204,11 +212,28 @@ private void processGetByYearRequest() throws IOException {
         }
     }
 
-    private void processGetByVehicleTypeRequest() {
+    private void processGetByVehicleTypeRequest() throws IOException {
             System.out.println("Enter the vehicle brand to search for:");
             String model = scanner.nextLine();
 
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("carInventory.csv"));
+        String input = bufferedReader.readLine();
+        String[] getDealership = input.split("\\|");
+        String dealershipInfo = getDealership[0] + "|" + getDealership[1] + "|" + getDealership[2];
+        System.out.println(dealershipInfo);
+        while ((input = bufferedReader.readLine()) != null) {
+            String[] vehicleInfo = input.split("\\|");
+            Vehicle vehicle = new Vehicle(vehicleInfo[0], Integer.parseInt(vehicleInfo[1]), vehicleInfo[2], vehicleInfo[3],
+                    vehicleInfo[4], vehicleInfo[5],Integer.parseInt(vehicleInfo[6]), Double.parseDouble(vehicleInfo[7]));
+            String allInventory = vehicle.getVin() + "|" + vehicle.getYearMake() + "|" + vehicle.getBrand() + "|" + vehicle.getMake() + "|" +
+                    vehicle.getModel() + "|" + vehicle.getColor() + "|" + vehicle.getOdometer() + "|" + vehicle.getPrice();
+            if (vehicle.getModel().equalsIgnoreCase(model)) {
+                System.out.println(allInventory);
+            } else {
+                System.out.println("No vehicles found");
+            }
         }
+    }
 
     public void processGetAllVehiclesRequest() throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader("carInventory.csv"));
@@ -278,6 +303,34 @@ private void processGetByYearRequest() throws IOException {
                 System.out.println("No vehicles found");
 
             }
+        }
+    }
+
+    public void purchaseVehicle() throws IOException {
+        System.out.println("Please enter the vin of the vehicle you would like to purchase");
+        String choice = scanner.nextLine();
+
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("carInventory.csv"));
+        String input = bufferedReader.readLine();
+        String[] getDealership = input.split("\\|");
+        String dealershipInfo = getDealership[0] + "|" + getDealership[1] + "|" + getDealership[2];
+        System.out.println(dealershipInfo);
+
+        while ((input = bufferedReader.readLine()) != null) {
+            String[] vehicleInfo = input.split("\\|");
+            String vin = vehicleInfo[0];
+            Vehicle vehicle = new Vehicle(vehicleInfo[0], Integer.parseInt(vehicleInfo[1]), vehicleInfo[2], vehicleInfo[3],
+                    vehicleInfo[4], vehicleInfo[5],Integer.parseInt(vehicleInfo[6]), Double.parseDouble(vehicleInfo[7]));
+            String allInventory = vehicle.getVin() + "|" + vehicle.getYearMake() + "|" + vehicle.getBrand() + "|" + vehicle.getMake() + "|" +
+                    vehicle.getModel() + "|" + vehicle.getColor() + "|" + vehicle.getOdometer() + "|" + vehicle.getPrice();
+
+
+        if (choice.equalsIgnoreCase(vin)) {
+            System.out.println(allInventory);
+            }
+
+
+
         }
     }
 }

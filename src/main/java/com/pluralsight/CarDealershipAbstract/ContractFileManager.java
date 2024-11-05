@@ -8,25 +8,23 @@ public class ContractFileManager {
     public ContractFileManager() {
 }
 
-    public void displayAllContracts () throws FileNotFoundException {
+    public List<Contract> displayContracts () throws FileNotFoundException {
         List<Contract> contracts = new ArrayList<>();
 
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("Contracts.csv"));
             String input;
             while (( input = bufferedReader.readLine()) != null) {
-                String[] data = input.split("\\|");
-                Vehicle v = new Vehicle(Integer.parseInt(data[4]), Integer.parseInt(data[5]), data[6], data[7],
-                        data[8], data[9], Integer.parseInt(data[10]), Double.parseDouble(data[11]));
-                if (data[0].equalsIgnoreCase("SALE")) {
-                    boolean financed = data[14].equalsIgnoreCase("YES");
-
-                    SalesContract salesContract = new SalesContract(data[1], data[2], data[3], v,
-                            5, Double.parseDouble(data[13]), financed);
-
+                String[] contractInfo = input.split("\\|");
+                Vehicle vehicle = new Vehicle(contractInfo[4], Integer.parseInt(contractInfo[5]), contractInfo[6], contractInfo[7],
+                        contractInfo[8], contractInfo[9], Integer.parseInt(contractInfo[10]), Double.parseDouble(contractInfo[11]));
+                if (contractInfo[0].equalsIgnoreCase("SALE")) {
+                    boolean financed = contractInfo[14].equalsIgnoreCase("YES");
+                    SalesContract salesContract = new SalesContract(contractInfo[1], contractInfo[2], contractInfo[3],
+                            vehicle, Double.parseDouble(contractInfo[15]), Double.parseDouble(contractInfo[13]));
                     contracts.add(salesContract);
-                } else if (data[0].equalsIgnoreCase("LEASE")) {
-                    LeaseContract leaseContract = new LeaseContract(data[1], data[2], data[3], v);
+                } else if (contractInfo[0].equalsIgnoreCase("LEASE")) {
+                    LeaseContract leaseContract = new LeaseContract(contractInfo[1], contractInfo[2], contractInfo[3], vehicle);
                     contracts.add(leaseContract);
                 }
             }
@@ -35,37 +33,36 @@ public class ContractFileManager {
             System.out.println("Error Reading File");
         }
         return contracts;
-
-
     }
 
 
-    public void saveContract () throws IOException {
+    public Contract saveContract (Contract contract) throws IOException {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("contracts.csv"));
+            ArrayList<Contract> contracts = new ArrayList<>();
             String input;
             while (( input = bufferedReader.readLine()) != null) {
-                String[] data = input.split("\\|");
-                Vehicle v = new Vehicle(Integer.parseInt(data[4]), Integer.parseInt(data[5]), data[6], data[7],
-                        data[8], data[9], Integer.parseInt(data[10]), Double.parseDouble(data[11]));
-                if (data[0].equalsIgnoreCase("SALE")) {
-                    boolean financed = data[14].equalsIgnoreCase("YES");
+                String[] contractInfo = input.split("\\|");
+                Vehicle v = new Vehicle(contractInfo[4], Integer.parseInt(contractInfo[5]), contractInfo[6], contractInfo[7],
+                        contractInfo[8], contractInfo[9], Integer.parseInt(contractInfo[10]), Double.parseDouble(contractInfo[11]));
+                if (contractInfo[0].equalsIgnoreCase("SALE")) {
+                    boolean isfinanced = contractInfo[14].equalsIgnoreCase("YES");
 
-                    SalesContract salesContract = new SalesContract(data[1], data[2], data[3], v,
-                            5, Double.parseDouble(data[13]), financed);
+                    SalesContract salesContract = new SalesContract(contractInfo[1], contractInfo[2], contractInfo[3], v,
+                            Double.parseDouble(contractInfo[15]), Double.parseDouble(contractInfo[13]));
 
                     contracts.add(salesContract);
-                } else if (data[0].equalsIgnoreCase("LEASE")) {
-                    LeaseContract leaseContract = new LeaseContract(data[1], data[2], data[3], v);
+                } else if (contractInfo[0].equalsIgnoreCase("LEASE")) {
+                    LeaseContract leaseContract = new LeaseContract(contractInfo[1], contractInfo[2], contractInfo[3], v);
                     contracts.add(leaseContract);
                 }
             }
             bufferedReader.close();
         } catch (Exception e) {
-            System.out.println("Error Reading File");
+            System.out.println("No vehicles found");
         }
-        return contracts;
-        }
+        return contract;
+    }
 
 
     public void displaySalesContracts (){

@@ -8,14 +8,15 @@ public class LeaseContract extends Contract {
     double leaseAPR = .04;
     double leaseTerm = 36;
 
-    public LeaseContract(String date, String customerName, String customerEmail, String vehicleSold) {
+    public LeaseContract(String date, String customerName, String customerEmail, Vehicle vehicleSold) {
         super(date, customerName, customerEmail, vehicleSold);
         this.getTotalPrice = getTotalPrice;
         this.getMonthlyPayment = getMonthlyPayment;
     }
 
     public double getEndingValue() {
-        return endingValue;
+        double residualPercentage = .58;
+        return this.vehiclePrice * residualPercentage;
     }
 
     public void setEndingValue(double endingValue) {
@@ -23,7 +24,7 @@ public class LeaseContract extends Contract {
     }
 
     public double getLeaseFee() {
-        return this.vehiclePrice * leaseAPR * leaseTerm;
+        return this.vehiclePrice * leaseAPR;
     }
 
     public void setLeaseFee(double leaseFee) {
@@ -32,11 +33,15 @@ public class LeaseContract extends Contract {
 
     @Override
     public double getTotalPrice() {
-        return getMonthlyPayment() * leaseTerm;
+        return this.getMonthlyPayment * leaseTerm;
     }
 
     @Override
     public double getMonthlyPayment(){
-        return vehiclePrice * leaseAPR / (1 - Math.pow(1 + leaseAPR, -leaseTerm));
+        double monthlyDepreciation = this.getEndingValue()/leaseTerm;
+        double loanAmount = this.vehiclePrice - this.getEndingValue() + this.getLeaseFee();
+        double monthlyInterestRate = leaseAPR / 12;
+
+        return loanAmount * monthlyInterestRate / (1 - Math.pow(1 + monthlyInterestRate, -leaseTerm));
     }
 }
